@@ -1,0 +1,40 @@
+<UserControl x:Class="SettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Padding="16">
+  <StackPanel MaxWidth="480" HorizontalAlignment="Left">
+
+    <!-- API Token -->
+    <Label Content="Notion API トークン" FontWeight="SemiBold" Margin="0,0,0,4"/>
+    <PasswordBox x:Name="ApiTokenBox"
+                 PasswordChanged="ApiTokenBox_PasswordChanged"
+                 Margin="0,0,0,4"/>
+    <TextBlock Text="Notion の Settings &gt; My connections &gt; Develop or manage integrations でトークンを取得してください"
+               TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,0,0,16"/>
+
+    <!-- Database ID -->
+    <Label Content="Database ID" FontWeight="SemiBold" Margin="0,0,0,4"/>
+    <TextBox x:Name="DatabaseIdBox"
+             TextChanged="DatabaseIdBox_TextChanged"
+             Margin="0,0,0,4"/>
+    <TextBlock Text="Notion のデータベースページ URL から取得: notion.so/.../{database-id}?v=..."
+               TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,0,0,16"/>
+
+    <!-- Title Property Name -->
+    <Label Content="タイトルプロパティ名" FontWeight="SemiBold" Margin="0,0,0,4"/>
+    <TextBox x:Name="TitlePropertyNameBox"
+             TextChanged="TitlePropertyNameBox_TextChanged"
+             Margin="0,0,0,4"/>
+    <TextBlock Text="データベースのタイトル列の名前（デフォルト: Name）。Notion でデータベースを開き、タイトル列の名前を確認してください"
+               TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,0,0,16"/>
+
+    <!-- Integration hint -->
+    <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="12" Background="#F8F8F8">
+      <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="#555">
+        <Bold>注意:</Bold> Notion のインテグレーションをデータベースに接続してください。
+        データベースページを開き、右上の「…」→「Connect to」からインテグレーションを追加します。
+      </TextBlock>
+    </Border>
+
+  </StackPanel>
+</UserControl>
