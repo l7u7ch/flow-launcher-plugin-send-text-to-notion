@@ -23,12 +23,13 @@ Flow Launcher 上から1コマンドで Notion データベースにメモを送
 ## 3. ファイル構成
 
 ```
-NotionJot.csproj   # プロジェクト定義（リポジトリルート）
+Flow.Launcher.Plugin.Notion.csproj   # プロジェクト定義（リポジトリルート）
 src/
 ├── plugin.json                          # プラグインマニフェスト
 ├── Main.cs                              # エントリーポイント (IAsyncPlugin, ISettingProvider)
 ├── NotionClient.cs                      # Notion API クライアント
 ├── Settings.cs                          # 設定 POCO
+├── ConfigStore.cs                       # ローカル config.json 永続化クラス
 ├── SettingsControl.xaml                 # 設定 UI (WPF)
 ├── SettingsControl.xaml.cs              # 設定 UI コードビハインド
 └── Images/
@@ -67,7 +68,14 @@ src/
 | DatabaseId        | string | `""`       | TextBox     | 送信先データベースの ID（32桁 hex、ハイフンあり/なし両対応）       |
 | TitlePropertyName | string | `"Name"`   | TextBox     | データベースのタイトル列名（空欄のとき `"Name"` にフォールバック） |
 
-設定は Flow Launcher が `%APPDATA%\FlowLauncher\Settings\Plugins\NotionJot\` に JSON 形式で自動保存する。
+設定の保存場所は2系統ある。
+
+| 保存場所 | パス | 管理者 |
+| -------- | ---- | ------ |
+| Flow Launcher 設定ストレージ | `%APPDATA%\FlowLauncher\Settings\Plugins\NotionJot\` | Flow Launcher が自動管理 |
+| ローカル config.json | `%APPDATA%\NotionJot\config.json` | ユーザーが直接編集可 |
+
+初期化時に両者をマージし、ローカル `config.json` の値で Flow Launcher 側の空欄を補完する（Flow Launcher 側に値がある場合はそちらを優先）。
 
 ---
 
@@ -125,14 +133,15 @@ DatabaseId のハイフンは送信前に自動除去する。
 
 Flow Launcher プラグインのエントリーポイント。
 
-| メンバー                   | 種別             | 説明                                                |
-| -------------------------- | ---------------- | --------------------------------------------------- |
-| `_context`                 | field            | `PluginInitContext`（`InitAsync` で設定）           |
-| `_settings`                | field            | `Settings`（`InitAsync` で設定）                    |
-| `_notionClient`            | field            | `NotionClient`（コンストラクタで初期化）            |
-| `InitAsync(context)`       | IAsyncPlugin     | `LoadSettingJsonStorage<Settings>()` で設定をロード |
-| `QueryAsync(query, token)` | IAsyncPlugin     | 入力状態を判定し `List<Result>` を返す              |
-| `CreateSettingPanel()`     | ISettingProvider | `SettingsControl(_settings)` を返す                 |
+| メンバー                   | 種別             | 説明                                                                                    |
+| -------------------------- | ---------------- | --------------------------------------------------------------------------------------- |
+| `_context`                 | field            | `PluginInitContext`（`InitAsync` で設定）                                               |
+| `_settings`                | field            | `Settings`（`InitAsync` で設定）                                                        |
+| `_notionClient`            | field            | `NotionClient`（コンストラクタで初期化）                                                |
+| `_configStore`             | field            | `ConfigStore`（`InitAsync` で設定）                                                     |
+| `InitAsync(context)`       | IAsyncPlugin     | Flow Launcher の設定をロードし、`ConfigStore` の値で空欄を補完                          |
+| `QueryAsync(query, token)` | IAsyncPlugin     | 入力状態を判定し `List<Result>` を返す                                                  |
+| `CreateSettingPanel()`     | ISettingProvider | `SettingsControl(_settings)` を返す                                                     |
 
 ### `NotionClient` (src/NotionClient.cs)
 
@@ -143,6 +152,18 @@ Notion API との通信を担当。
 | `_http`              | static HttpClient | ソケット枯渇防止のためスタティック                                                   |
 | `SendMemoAsync(...)` | async Task        | API 呼び出し。`CancellationToken` 対応。`(bool Success, string ErrorMessage)` を返す |
 | `BuildBody(...)`     | private static    | JSON ボディ用の匿名オブジェクトを構築                                                |
+
+### `ConfigStore` (src/ConfigStore.cs)
+
+`%APPDATA%\NotionJot\config.json` への設定永続化を担当。Flow Launcher の設定ストレージとは独立して動作する。
+
+| メンバー              | 種別          | 説明                                                                          |
+| --------------------- | ------------- | ----------------------------------------------------------------------------- |
+| `FilePath`            | property      | 設定ファイルのフルパス                                                        |
+| `Exists`              | property      | 設定ファイルが存在するかどうか                                                |
+| `Load()`              | method        | ファイルが存在すれば読み込み、存在しなければデフォルト値の `Settings` を返す  |
+| `Save(settings)`      | method        | `Settings` をインデント付き JSON でファイルに書き出す                         |
+| `MergeInto(src, file)` | static method | `src` の空欄項目を `file` の値で補完する（`src` 側に値があれば優先）         |
 
 ### `Settings` (src/Settings.cs)
 
