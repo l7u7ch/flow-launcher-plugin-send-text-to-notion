@@ -1,4 +1,4 @@
-# 仕様書 — Notion Jot
+# 仕様書 — Flow.Launcher.Plugin.Notion
 
 ---
 
@@ -67,7 +67,7 @@ src/
 | DatabaseId        | string | `""`       | TextBox     | 送信先データベースの ID（32桁 hex、ハイフンあり/なし両対応）       |
 | TitlePropertyName | string | `"Name"`   | TextBox     | データベースのタイトル列名（空欄のとき `"Name"` にフォールバック） |
 
-設定は Flow Launcher が `%APPDATA%\FlowLauncher\Settings\Plugins\NotionJot\` に JSON 形式で自動保存する。
+設定は Flow Launcher が `%APPDATA%\FlowLauncher\Settings\Plugins\Notion\` に JSON 形式で自動保存する。
 
 ---
 
@@ -169,7 +169,7 @@ dotnet build -c Release
 
 ```powershell
 $src  = ".\bin\Release\net9.0-windows"
-$dest = "$env:APPDATA\FlowLauncher\Plugins\NotionJot-1.0.0"
+$dest = "$env:APPDATA\FlowLauncher\Plugins\Notion-1.0.0"
 Copy-Item -Recurse -Force $src $dest
 ```
 

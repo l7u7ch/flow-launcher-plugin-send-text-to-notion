@@ -1,4 +1,4 @@
-# Notion Jot
+# Flow.Launcher.Plugin.Notion
 
 [Flow Launcher](https://www.flowlauncher.com/) から1コマンドで Notion データベースにメモを送信するプラグイン。
 
@@ -36,7 +36,7 @@ dotnet build -c Release
 
 ```powershell
 $src  = ".\bin\Release\net9.0-windows"
-$dest = "$env:APPDATA\FlowLauncher\Plugins\NotionJot-1.0.0"
+$dest = "$env:APPDATA\FlowLauncher\Plugins\Notion-1.0.0"
 Copy-Item -Recurse -Force $src $dest
 ```
 
@@ -44,7 +44,7 @@ Flow Launcher を再起動し、Settings > Plugins に表示されることを�
 
 ### 4. プラグイン設定
 
-Settings > Plugins > Notion Jot を開き、以下の項目を入力。
+Settings > Plugins > Notion を開き、以下の項目を入力。
 
 | 設定名 | 説明 |
 | --- | --- |
