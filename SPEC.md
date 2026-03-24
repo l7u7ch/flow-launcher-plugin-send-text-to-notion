@@ -67,7 +67,7 @@ src/
 | DatabaseId        | string | `""`       | TextBox     | 送信先データベースの ID（32桁 hex、ハイフンあり/なし両対応）       |
 | TitlePropertyName | string | `"Name"`   | TextBox     | データベースのタイトル列名（空欄のとき `"Name"` にフォールバック） |
 
-設定は Flow Launcher が `%APPDATA%\FlowLauncher\Settings\Plugins\Notion\` に JSON 形式で自動保存する。
+設定は Flow Launcher が `%APPDATA%\FlowLauncher\Settings\Plugins\Flow.Launcher.Plugin.Notion\Settings.json` に JSON 形式で自動保存する。
 
 ---
 
