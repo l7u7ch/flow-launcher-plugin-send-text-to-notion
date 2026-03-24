@@ -44,8 +44,6 @@ Flow Launcher を再起動し、Settings > Plugins に表示されることを�
 
 ### 4. プラグイン設定
 
-**方法 A: Flow Launcher の設定 UI から設定する**
-
 Settings > Plugins > Notion Jot を開き、以下の項目を入力。
 
 | 設定名 | 説明 |
@@ -53,18 +51,6 @@ Settings > Plugins > Notion Jot を開き、以下の項目を入力。
 | API Token | Notion Internal Integration のトークン (`secret_...`) |
 | Database ID | 送信先データベースの ID（ハイフンあり/なし両対応） |
 | タイトルプロパティ名 | タイトル列の名前（デフォルト: `Name`） |
-
-**方法 B: `config.json` を直接編集する**
-
-`%APPDATA%\NotionJot\config.json` にテキストエディタで設定を書き込める。Flow Launcher の設定 UI より優先して読み込まれ、CLI ツール（NotionJot）との設定共有にも使える。
-
-```json
-{
-  "ApiToken": "secret_...",
-  "DatabaseId": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "TitlePropertyName": "Name"
-}
-```
 
 ## トラブルシューティング
 

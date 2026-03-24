@@ -6,7 +6,6 @@ public sealed class Main : IAsyncPlugin, ISettingProvider
     private PluginInitContext _context = null!;
     private Settings _settings = null!;
     private readonly NotionClient _notionClient = new();
-    private ConfigStore _configStore = null!;
 
     private const string IconPath = "Images\\notion.png";
 
@@ -18,12 +17,6 @@ public sealed class Main : IAsyncPlugin, ISettingProvider
     {
         _context = context;
         _settings = context.API.LoadSettingJsonStorage<Settings>();
-
-        // ローカル config.json からも読み込み、未設定の項目を補完する
-        _configStore = new ConfigStore();
-        var fileSettings = _configStore.Load();
-        ConfigStore.MergeInto(_settings, fileSettings);
-
         return Task.CompletedTask;
     }
 
