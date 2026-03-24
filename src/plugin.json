@@ -8,5 +8,5 @@
   "Language": "csharp",
   "Website": "",
   "IcoPath": "Images\\notion.png",
-  "ExecuteFileName": "NotionJot.dll"
+  "ExecuteFileName": "Flow.Launcher.Plugin.Notion.dll"
 }

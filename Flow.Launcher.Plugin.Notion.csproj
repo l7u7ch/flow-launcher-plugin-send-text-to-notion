@@ -3,7 +3,7 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
-    <AssemblyName>NotionJot</AssemblyName>
+    <AssemblyName>Flow.Launcher.Plugin.Notion</AssemblyName>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>x64</Platforms>
