@@ -21,7 +21,7 @@ Flow Launcher を開いてテキストを入力し、Enter を押すだけ。
 
 ### 1. Notion インテグレーションの作成
 
-1. [Notion Integrations](https://www.notion.so/my-integrations) で **Internal Integration** を作成し、API トークンを取得
+1. Notion の **Settings > My connections > Develop or manage integrations** で **Internal Integration** を作成し、API トークンを取得
 2. 送信先データベースを開き「**…**」→「**Connect to**」でインテグレーションを接続
 
 ### 2. ビルド

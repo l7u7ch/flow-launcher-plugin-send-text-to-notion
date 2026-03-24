@@ -108,7 +108,7 @@ DatabaseId のハイフンは送信前に自動除去する。
 
 | HTTP ステータス | 意味                                                                  |
 | --------------- | --------------------------------------------------------------------- |
-| 200             | 送信成功                                                              |
+| 2xx             | 送信成功（`IsSuccessStatusCode` が true の場合）                      |
 | 400             | リクエスト不正（プロパティ名の誤りなど）                              |
 | 401             | 認証失敗（トークン誤り）                                              |
 | 404             | データベースが見つからない（ID 誤り、またはインテグレーション未接続） |
@@ -179,7 +179,7 @@ Flow Launcher を再起動して Settings > Plugins に表示されることを�
 
 ## 8. Notion 側の事前設定
 
-1. [Notion Integrations](https://www.notion.so/my-integrations) で **Internal Integration** を作成し、API トークンを取得
+1. Notion の **Settings > My connections > Develop or manage integrations** で **Internal Integration** を作成し、API トークンを取得
 2. 送信先データベースのページを開き「**…**」→「**Connect to**」でインテグレーションを接続
 3. データベース URL から **Database ID** を取得
    例: `notion.so/workspace/{database-id}?v=...`
