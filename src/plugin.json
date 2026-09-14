@@ -4,5 +4,5 @@
   "Name": "Send Text to Notion",
   "Language": "csharp",
   "IcoPath": "Images\\notion.png",
-  "ExecuteFileName": "flow-launcher-plugin-send-text-to-notion.dll"
+  "ExecuteFileName": "Flow.Launcher.Plugin.SendTextToNotion.dll"
 }

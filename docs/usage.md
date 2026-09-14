@@ -8,7 +8,7 @@
 
 ## インストール
 
-1. GitHub Release から `flow-launcher-plugin-send-text-to-notion.zip` を取得します。
+1. GitHub Release から `Flow.Launcher.Plugin.SendTextToNotion.zip` を取得します。
 2. ZIP を `%APPDATA%\FlowLauncher\Plugins` 配下の任意のフォルダーへ展開します。
 3. 展開先の直下に `plugin.json` があることを確認します。
 4. Flow Launcher を再起動します。

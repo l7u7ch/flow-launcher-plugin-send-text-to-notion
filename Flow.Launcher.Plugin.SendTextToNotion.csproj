@@ -3,8 +3,8 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
-    <AssemblyName>flow-launcher-plugin-send-text-to-notion</AssemblyName>
-    <RootNamespace>FlowLauncherPluginSendTextToNotion</RootNamespace>
+    <AssemblyName>Flow.Launcher.Plugin.SendTextToNotion</AssemblyName>
+    <RootNamespace>Flow.Launcher.Plugin.SendTextToNotion</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>x64</Platforms>
