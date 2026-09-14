@@ -1,4 +1,5 @@
 using System.Windows;
+using System.Windows.Automation;
 using System.Windows.Controls;
 
 public partial class SettingsControl : UserControl
@@ -43,7 +44,9 @@ public partial class SettingsControl : UserControl
             VisibleApiTokenBox.Text = ApiTokenBox.Password;
             ApiTokenBox.Visibility = Visibility.Collapsed;
             VisibleApiTokenBox.Visibility = Visibility.Visible;
+            ApiTokenLabel.Target = VisibleApiTokenBox;
             ToggleApiTokenVisibilityButton.ToolTip = "Hide token";
+            AutomationProperties.SetName(ToggleApiTokenVisibilityButton, "Hide token");
             UpdateApiTokenPlaceholder();
             VisibleApiTokenBox.Focus();
             return;
@@ -52,7 +55,9 @@ public partial class SettingsControl : UserControl
         ApiTokenBox.Password = VisibleApiTokenBox.Text;
         VisibleApiTokenBox.Visibility = Visibility.Collapsed;
         ApiTokenBox.Visibility = Visibility.Visible;
+        ApiTokenLabel.Target = ApiTokenBox;
         ToggleApiTokenVisibilityButton.ToolTip = "Show token";
+        AutomationProperties.SetName(ToggleApiTokenVisibilityButton, "Show token");
         UpdateApiTokenPlaceholder();
         ApiTokenBox.Focus();
     }

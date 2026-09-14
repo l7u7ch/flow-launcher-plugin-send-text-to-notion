@@ -1,64 +1,177 @@
 <UserControl x:Class="SettingsControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Padding="16">
-  <StackPanel MaxWidth="480" HorizontalAlignment="Left">
+             Padding="16"
+             SnapsToDevicePixels="True">
+  <UserControl.Resources>
+    <!--
+      Settings form design system
+      Spacing: 4 / 8 / 12 / 16 / 24
+      Control height: 32
+      Colors and typography intentionally inherit from Flow Launcher.
+    -->
+    <Style x:Key="FieldGroupStyle" TargetType="StackPanel">
+      <Setter Property="Margin" Value="0,0,0,24"/>
+    </Style>
+
+    <Style x:Key="FieldLabelStyle"
+           TargetType="Label"
+           BasedOn="{StaticResource {x:Type Label}}">
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="Margin" Value="0,0,0,8"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    </Style>
+
+    <Style x:Key="FieldHelpStyle" TargetType="TextBlock">
+      <Setter Property="Margin" Value="0,8,0,0"/>
+      <Setter Property="Opacity" Value="0.65"/>
+      <Setter Property="TextWrapping" Value="Wrap"/>
+    </Style>
+
+    <Style x:Key="FieldTextBoxStyle"
+           TargetType="TextBox"
+           BasedOn="{StaticResource {x:Type TextBox}}">
+      <Setter Property="MinHeight" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="FieldPasswordBoxStyle"
+           TargetType="PasswordBox"
+           BasedOn="{StaticResource {x:Type PasswordBox}}">
+      <Setter Property="MinHeight" Value="32"/>
+      <Setter Property="Padding" Value="8,4"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style x:Key="PlaceholderStyle" TargetType="TextBlock">
+      <Setter Property="Margin" Value="9,0"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="Opacity" Value="0.55"/>
+      <Setter Property="IsHitTestVisible" Value="False"/>
+      <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+    <Style x:Key="IconButtonStyle"
+           TargetType="Button"
+           BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Width" Value="32"/>
+      <Setter Property="Height" Value="32"/>
+      <Setter Property="Padding" Value="7"/>
+      <Setter Property="HorizontalContentAlignment" Value="Center"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+  </UserControl.Resources>
+
+  <Grid MaxWidth="520"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
 
     <!-- API Token -->
-    <Label Content="Notion API Token" FontWeight="SemiBold" Margin="0,0,0,4"/>
-    <Grid Margin="0,0,0,16">
-      <PasswordBox x:Name="ApiTokenBox"
-                   PasswordChanged="ApiTokenBox_PasswordChanged"
-                   Padding="0,0,32,0"
-                   ToolTip="Notion API token"/>
-      <TextBox x:Name="VisibleApiTokenBox"
-               TextChanged="VisibleApiTokenBox_TextChanged"
-               Visibility="Collapsed"
-               Padding="0,0,32,0"
-               ToolTip="Notion API token"/>
-      <TextBlock x:Name="ApiTokenPlaceholder"
-                 Text="ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-                 Foreground="Gray"
-                 IsHitTestVisible="False"
-                 VerticalAlignment="Center"
-                 Margin="7,0,36,0"/>
-      <Button x:Name="ToggleApiTokenVisibilityButton"
-              Content="👁"
-              Click="ToggleApiTokenVisibilityButton_Click"
-              ToolTip="Show token"
-              HorizontalAlignment="Right"
-              VerticalAlignment="Center"
-              Width="28"
-              Height="24"
-              Margin="0,0,4,0"
-              Padding="0"/>
-    </Grid>
+    <StackPanel Grid.Row="0" Style="{StaticResource FieldGroupStyle}">
+      <Label x:Name="ApiTokenLabel"
+             Content="Notion API Token"
+             Target="{Binding ElementName=ApiTokenBox}"
+             Style="{StaticResource FieldLabelStyle}"/>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="8"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <PasswordBox x:Name="ApiTokenBox"
+                     Grid.Column="0"
+                     PasswordChanged="ApiTokenBox_PasswordChanged"
+                     Style="{StaticResource FieldPasswordBoxStyle}"
+                     ToolTip="Notion API token"
+                     AutomationProperties.Name="Notion API Token"
+                     TabIndex="0"/>
+        <TextBox x:Name="VisibleApiTokenBox"
+                 Grid.Column="0"
+                 TextChanged="VisibleApiTokenBox_TextChanged"
+                 Visibility="Collapsed"
+                 Style="{StaticResource FieldTextBoxStyle}"
+                 ToolTip="Notion API token"
+                 AutomationProperties.Name="Notion API Token"
+                 TabIndex="0"/>
+        <TextBlock x:Name="ApiTokenPlaceholder"
+                   Grid.Column="0"
+                   Text="ntn_…"
+                   Style="{StaticResource PlaceholderStyle}"/>
+
+        <Button x:Name="ToggleApiTokenVisibilityButton"
+                Grid.Column="2"
+                Click="ToggleApiTokenVisibilityButton_Click"
+                ToolTip="Show token"
+                AutomationProperties.Name="Show token"
+                Style="{StaticResource IconButtonStyle}"
+                TabIndex="1">
+          <Viewbox Width="18" Height="18">
+            <Canvas Width="24" Height="24">
+              <Path Data="M2,12 C4.4,7.5 7.8,5 12,5 C16.2,5 19.6,7.5 22,12 C19.6,16.5 16.2,19 12,19 C7.8,19 4.4,16.5 2,12 Z"
+                    Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                    StrokeThickness="1.8"
+                    Fill="Transparent"/>
+              <Ellipse Canvas.Left="8.5"
+                       Canvas.Top="8.5"
+                       Width="7"
+                       Height="7"
+                       Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                       StrokeThickness="1.8"/>
+            </Canvas>
+          </Viewbox>
+        </Button>
+      </Grid>
+      <TextBlock Text="Internal integration secret used to access your workspace."
+                 Style="{StaticResource FieldHelpStyle}"/>
+    </StackPanel>
 
     <!-- Database ID -->
-    <Label Content="Database ID" FontWeight="SemiBold" Margin="0,0,0,4"/>
-    <Grid Margin="0,0,0,16">
-      <TextBox x:Name="DatabaseIdBox"
-               TextChanged="DatabaseIdBox_TextChanged"/>
-      <TextBlock x:Name="DatabaseIdPlaceholder"
-                 Text="0123456789abcdef0123456789abcdef"
-                 Foreground="Gray"
-                 IsHitTestVisible="False"
-                 VerticalAlignment="Center"
-                 Margin="7,0"/>
-    </Grid>
+    <StackPanel Grid.Row="1" Style="{StaticResource FieldGroupStyle}">
+      <Label Content="Database ID"
+             Target="{Binding ElementName=DatabaseIdBox}"
+             Style="{StaticResource FieldLabelStyle}"/>
+      <Grid>
+        <TextBox x:Name="DatabaseIdBox"
+                 TextChanged="DatabaseIdBox_TextChanged"
+                 Style="{StaticResource FieldTextBoxStyle}"
+                 ToolTip="Destination database ID"
+                 AutomationProperties.Name="Database ID"
+                 TabIndex="2"/>
+        <TextBlock x:Name="DatabaseIdPlaceholder"
+                   Text="0123456789abcdef0123456789abcdef"
+                   Style="{StaticResource PlaceholderStyle}"/>
+      </Grid>
+      <TextBlock Text="32-character ID from the destination database URL."
+                 Style="{StaticResource FieldHelpStyle}"/>
+    </StackPanel>
 
     <!-- Title Property Name -->
-    <Label Content="Title Property Name" FontWeight="SemiBold" Margin="0,0,0,4"/>
-    <Grid>
-      <TextBox x:Name="TitlePropertyNameBox"
-               TextChanged="TitlePropertyNameBox_TextChanged"/>
-      <TextBlock x:Name="TitlePropertyNamePlaceholder"
-                 Text="Name"
-                 Foreground="Gray"
-                 IsHitTestVisible="False"
-                 VerticalAlignment="Center"
-                 Margin="7,0"/>
-    </Grid>
+    <StackPanel Grid.Row="2">
+      <Label Content="Title Property Name"
+             Target="{Binding ElementName=TitlePropertyNameBox}"
+             Style="{StaticResource FieldLabelStyle}"/>
+      <Grid>
+        <TextBox x:Name="TitlePropertyNameBox"
+                 TextChanged="TitlePropertyNameBox_TextChanged"
+                 Style="{StaticResource FieldTextBoxStyle}"
+                 ToolTip="Database title property name"
+                 AutomationProperties.Name="Title Property Name"
+                 TabIndex="3"/>
+        <TextBlock x:Name="TitlePropertyNamePlaceholder"
+                   Text="Name"
+                   Style="{StaticResource PlaceholderStyle}"/>
+      </Grid>
+      <TextBlock Text="Name of the database title property. Defaults to Name."
+                 Style="{StaticResource FieldHelpStyle}"/>
+    </StackPanel>
 
-  </StackPanel>
+  </Grid>
 </UserControl>
