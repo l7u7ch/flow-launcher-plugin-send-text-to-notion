@@ -2,37 +2,79 @@ name: Release
 
 on:
   workflow_dispatch:
+    inputs:
+      bump:
+        description: Version increment
+        required: true
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
+    if: github.ref == 'refs/heads/main'
     runs-on: windows-latest
 
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "9.0.x"
 
+      - name: Increment plugin version
+        id: version
+        shell: pwsh
+        run: |
+          $latestTag = git tag --list 'v*' --sort=-version:refname |
+            Where-Object { $_ -match '^v\d+\.\d+\.\d+$' } |
+            Select-Object -First 1
+
+          if (-not $latestTag) {
+            throw 'No semantic version tag matching vX.Y.Z exists.'
+          }
+
+          $currentVersion = $latestTag.Substring(1)
+          $metadata = Get-Content "src/plugin.json" -Raw | ConvertFrom-Json
+          if ($metadata.Version -ne $currentVersion) {
+            throw "src/plugin.json version ($($metadata.Version)) does not match the latest tag ($latestTag)."
+          }
+
+          [int]$major, [int]$minor, [int]$patch = $currentVersion.Split('.')
+          switch ("${{ inputs.bump }}") {
+            'major' { $major++; $minor = 0; $patch = 0 }
+            'minor' { $minor++; $patch = 0 }
+            'patch' { $patch++ }
+            default { throw "Unsupported version increment: ${{ inputs.bump }}" }
+          }
+
+          $version = "$major.$minor.$patch"
+          $metadata.Version = $version
+          $metadata | ConvertTo-Json -Depth 10 | Set-Content "src/plugin.json" -Encoding utf8NoBOM -NoNewline
+
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+          "title=Send Text to Notion v$version" >> $env:GITHUB_OUTPUT
+
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build release
         run: dotnet build --configuration Release --no-restore
-
-      - name: Set release identifier
-        id: release
-        shell: pwsh
-        run: |
-          $metadata = Get-Content "src/plugin.json" -Raw | ConvertFrom-Json
-          $version = $metadata.Version
-          "tag=v$version" >> $env:GITHUB_OUTPUT
-          "title=Send Text to Notion v$version" >> $env:GITHUB_OUTPUT
 
       - name: Package plugin
         shell: pwsh
@@ -42,15 +84,24 @@ jobs:
           New-Item -ItemType Directory -Force -Path "dist" | Out-Null
           Compress-Archive -Path "$output/*" -DestinationPath $archive -Force
 
+      - name: Commit and tag release
+        env:
+          RELEASE_VERSION: ${{ steps.version.outputs.version }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/plugin.json
+          git commit -m "chore(release): v$env:RELEASE_VERSION"
+          git tag --annotate $env:RELEASE_TAG --message "Release $env:RELEASE_TAG"
+          git push origin HEAD:main $env:RELEASE_TAG
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
-          RELEASE_TAG: ${{ steps.release.outputs.tag }}
-          RELEASE_TITLE: ${{ steps.release.outputs.title }}
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+          RELEASE_TITLE: ${{ steps.version.outputs.title }}
         shell: pwsh
         run: |
-          if (gh release view $env:RELEASE_TAG 2>$null) {
-            gh release upload $env:RELEASE_TAG "dist/Flow.Launcher.Plugin.SendTextToNotion.zip" --clobber
-          } else {
-            gh release create $env:RELEASE_TAG "dist/Flow.Launcher.Plugin.SendTextToNotion.zip" --target "${{ github.sha }}" --title $env:RELEASE_TITLE --generate-notes
-          }
+          gh release create $env:RELEASE_TAG "dist/Flow.Launcher.Plugin.SendTextToNotion.zip" --title $env:RELEASE_TITLE --generate-notes

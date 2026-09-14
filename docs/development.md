@@ -37,9 +37,9 @@ Copy-Item -Recurse -Force $src $dest
 
 ## リリース
 
-GitHub Actions の **Release > Run workflow** を実行すると、Windows 上で依存関係の復元と Release ビルドを行い、`Flow.Launcher.Plugin.SendTextToNotion.zip` を GitHub Release に添付します。
+GitHub Actions の **Release > Run workflow** を `main` ブランチから実行し、`patch`、`minor`、`major` のいずれかを選択します。ワークフローは最新の `vX.Y.Z` タグを基準に Semantic Versioning の番号を繰り上げます。
 
-リリースタグとタイトルは `src/plugin.json` の `Version` を正本として、`v{Version}` および `Send Text to Notion v{Version}` を使用します。公開版を更新する際は、Release 実行前に `Version` を更新してください。同じバージョンで再実行した場合は、既存 Release の ZIP を更新します。
+ワークフローは `src/plugin.json` の `Version` が最新タグと一致することを確認してから、次のバージョンを書き込み、Windows 上で依存関係の復元、Release ビルド、ZIP 作成を行います。成功後にのみ `main` へ `chore(release): vX.Y.Z` をコミットし、注釈付きの `vX.Y.Z` タグを push して、新しい GitHub Release に ZIP を添付します。既存タグや Release の上書きは行いません。
 
 ## Flow Launcher Plugin Store
 
