@@ -5,36 +5,60 @@
   <StackPanel MaxWidth="480" HorizontalAlignment="Left">
 
     <!-- API Token -->
-    <Label Content="Notion API トークン" FontWeight="SemiBold" Margin="0,0,0,4"/>
-    <PasswordBox x:Name="ApiTokenBox"
-                 PasswordChanged="ApiTokenBox_PasswordChanged"
-                 Margin="0,0,0,4"/>
-    <TextBlock Text="Notion の Settings &gt; My connections &gt; Develop or manage integrations でトークンを取得してください"
-               TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,0,0,16"/>
+    <Label Content="Notion API Token" FontWeight="SemiBold" Margin="0,0,0,4"/>
+    <Grid Margin="0,0,0,16">
+      <PasswordBox x:Name="ApiTokenBox"
+                   PasswordChanged="ApiTokenBox_PasswordChanged"
+                   Padding="0,0,32,0"
+                   ToolTip="Notion API token"/>
+      <TextBox x:Name="VisibleApiTokenBox"
+               TextChanged="VisibleApiTokenBox_TextChanged"
+               Visibility="Collapsed"
+               Padding="0,0,32,0"
+               ToolTip="Notion API token"/>
+      <TextBlock x:Name="ApiTokenPlaceholder"
+                 Text="ntn_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                 Foreground="Gray"
+                 IsHitTestVisible="False"
+                 VerticalAlignment="Center"
+                 Margin="7,0,36,0"/>
+      <Button x:Name="ToggleApiTokenVisibilityButton"
+              Content="👁"
+              Click="ToggleApiTokenVisibilityButton_Click"
+              ToolTip="Show token"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Center"
+              Width="28"
+              Height="24"
+              Margin="0,0,4,0"
+              Padding="0"/>
+    </Grid>
 
     <!-- Database ID -->
     <Label Content="Database ID" FontWeight="SemiBold" Margin="0,0,0,4"/>
-    <TextBox x:Name="DatabaseIdBox"
-             TextChanged="DatabaseIdBox_TextChanged"
-             Margin="0,0,0,4"/>
-    <TextBlock Text="Notion のデータベースページ URL から取得: notion.so/.../{database-id}?v=..."
-               TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,0,0,16"/>
+    <Grid Margin="0,0,0,16">
+      <TextBox x:Name="DatabaseIdBox"
+               TextChanged="DatabaseIdBox_TextChanged"/>
+      <TextBlock x:Name="DatabaseIdPlaceholder"
+                 Text="0123456789abcdef0123456789abcdef"
+                 Foreground="Gray"
+                 IsHitTestVisible="False"
+                 VerticalAlignment="Center"
+                 Margin="7,0"/>
+    </Grid>
 
     <!-- Title Property Name -->
-    <Label Content="タイトルプロパティ名" FontWeight="SemiBold" Margin="0,0,0,4"/>
-    <TextBox x:Name="TitlePropertyNameBox"
-             TextChanged="TitlePropertyNameBox_TextChanged"
-             Margin="0,0,0,4"/>
-    <TextBlock Text="データベースのタイトル列の名前（デフォルト: Name）。Notion でデータベースを開き、タイトル列の名前を確認してください"
-               TextWrapping="Wrap" Foreground="Gray" FontSize="11" Margin="0,0,0,16"/>
-
-    <!-- Integration hint -->
-    <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" Padding="12" Background="#F8F8F8">
-      <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="#555">
-        <Bold>注意:</Bold> Notion のインテグレーションをデータベースに接続してください。
-        データベースページを開き、右上の「…」→「Connect to」からインテグレーションを追加します。
-      </TextBlock>
-    </Border>
+    <Label Content="Title Property Name" FontWeight="SemiBold" Margin="0,0,0,4"/>
+    <Grid>
+      <TextBox x:Name="TitlePropertyNameBox"
+               TextChanged="TitlePropertyNameBox_TextChanged"/>
+      <TextBlock x:Name="TitlePropertyNamePlaceholder"
+                 Text="Name"
+                 Foreground="Gray"
+                 IsHitTestVisible="False"
+                 VerticalAlignment="Center"
+                 Margin="7,0"/>
+    </Grid>
 
   </StackPanel>
 </UserControl>
