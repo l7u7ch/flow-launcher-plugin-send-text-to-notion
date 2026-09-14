@@ -33,9 +33,9 @@ public sealed class Main : IAsyncPlugin, ISettingProvider
                 {
                     new()
                     {
-                        Title = "Notion: 設定が必要です",
+                        Title = "Send Text to Notion: 設定が必要です",
                         SubTitle =
-                            "Settings > Plugins > Notion で API トークンと Database ID を設定してください",
+                            "Settings > Plugins > Send Text to Notion で API トークンと Database ID を設定してください",
                         IcoPath = IconPath,
                         Score = 100,
                         Action = _ =>
@@ -58,7 +58,7 @@ public sealed class Main : IAsyncPlugin, ISettingProvider
                 {
                     new()
                     {
-                        Title = "Notion",
+                        Title = "Send Text to Notion",
                         SubTitle = "メモのテキストを入力して Enter で送信",
                         IcoPath = IconPath,
                         Score = 100,
@@ -79,7 +79,7 @@ public sealed class Main : IAsyncPlugin, ISettingProvider
             {
                 new()
                 {
-                    Title = $"Notion に送信: \"{memoText}\"",
+                    Title = $"Notion にテキストを送信: \"{memoText}\"",
                     SubTitle = $"Database: {dbPreview}",
                     IcoPath = IconPath,
                     Score = 100,
@@ -95,7 +95,7 @@ public sealed class Main : IAsyncPlugin, ISettingProvider
                         if (success)
                         {
                             _context.API.ShowMsg(
-                                "Notion 送信完了",
+                                "Notion へのテキスト送信完了",
                                 $"\"{memoText}\"",
                                 IconPath
                             );

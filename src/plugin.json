@@ -1,8 +1,8 @@
 {
   "ID": "8AF2E3014DD049B0B437F781542C8878",
   "ActionKeyword": "*",
-  "Name": "Notion",
+  "Name": "Send Text to Notion",
   "Language": "csharp",
   "IcoPath": "Images\\notion.png",
-  "ExecuteFileName": "Flow.Launcher.Plugin.Notion.dll"
+  "ExecuteFileName": "flow-launcher-plugin-send-text-to-notion.dll"
 }

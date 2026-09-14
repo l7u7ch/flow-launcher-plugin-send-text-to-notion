@@ -37,7 +37,7 @@ jobs:
         shell: pwsh
         run: |
           $output = "bin/Release/net9.0-windows"
-          $archive = "dist/Flow.Launcher.Plugin.Notion.zip"
+          $archive = "dist/flow-launcher-plugin-send-text-to-notion.zip"
           New-Item -ItemType Directory -Force -Path "dist" | Out-Null
           Compress-Archive -Path "$output/*" -DestinationPath $archive -Force
 
@@ -49,7 +49,7 @@ jobs:
         shell: pwsh
         run: |
           if (gh release view $env:RELEASE_TAG 2>$null) {
-            gh release upload $env:RELEASE_TAG "dist/Flow.Launcher.Plugin.Notion.zip" --clobber
+            gh release upload $env:RELEASE_TAG "dist/flow-launcher-plugin-send-text-to-notion.zip" --clobber
           } else {
-            gh release create $env:RELEASE_TAG "dist/Flow.Launcher.Plugin.Notion.zip" --target "${{ github.sha }}" --title $env:RELEASE_TITLE --generate-notes
+            gh release create $env:RELEASE_TAG "dist/flow-launcher-plugin-send-text-to-notion.zip" --target "${{ github.sha }}" --title $env:RELEASE_TITLE --generate-notes
           }
