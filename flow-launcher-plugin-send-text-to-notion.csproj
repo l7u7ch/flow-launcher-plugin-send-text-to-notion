@@ -4,6 +4,7 @@
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
     <AssemblyName>flow-launcher-plugin-send-text-to-notion</AssemblyName>
+    <RootNamespace>FlowLauncherPluginSendTextToNotion</RootNamespace>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <Platforms>x64</Platforms>
