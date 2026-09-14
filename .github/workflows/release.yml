@@ -29,9 +29,10 @@ jobs:
         id: release
         shell: pwsh
         run: |
-          $commit = "${{ github.sha }}"
-          "tag=build-$commit" >> $env:GITHUB_OUTPUT
-          "title=Build $($commit.Substring(0, 7))" >> $env:GITHUB_OUTPUT
+          $metadata = Get-Content "src/plugin.json" -Raw | ConvertFrom-Json
+          $version = $metadata.Version
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+          "title=Send Text to Notion v$version" >> $env:GITHUB_OUTPUT
 
       - name: Package plugin
         shell: pwsh

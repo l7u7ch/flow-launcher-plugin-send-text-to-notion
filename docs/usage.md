@@ -15,6 +15,8 @@
 
 ソースから導入する場合は、[開発とリリース](development.md#ローカルインストール)を参照してください。
 
+Plugin Store 版は Flow Launcher チームによる掲載 PR の承認後に利用できます。掲載前は GitHub Release の ZIP を手動で導入してください。
+
 ## Notion の準備
 
 1. Notion の **Settings > My connections > Develop or manage integrations** で Internal Integration を作成し、API トークンを取得します。

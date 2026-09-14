@@ -1,8 +1,14 @@
 {
+  "$schema": "https://www.flowlauncher.com/schemas/plugin.schema.json",
   "ID": "8AF2E3014DD049B0B437F781542C8878",
   "ActionKeyword": "*",
   "Name": "Send Text to Notion",
+  "Description": "Quickly send text from Flow Launcher to a Notion database.",
+  "Author": "l7u7ch",
+  "Version": "1.0.0",
   "Language": "csharp",
+  "Website": "https://github.com/l7u7ch/flow-launcher-plugin-send-text-to-notion",
+  "MinimumAppVersion": "1.19.0",
   "IcoPath": "Images\\notion.png",
   "ExecuteFileName": "Flow.Launcher.Plugin.SendTextToNotion.dll"
 }

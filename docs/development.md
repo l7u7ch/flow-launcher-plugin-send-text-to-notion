@@ -39,4 +39,8 @@ Copy-Item -Recurse -Force $src $dest
 
 GitHub Actions の **Release > Run workflow** を実行すると、Windows 上で依存関係の復元と Release ビルドを行い、`Flow.Launcher.Plugin.SendTextToNotion.zip` を GitHub Release に添付します。
 
-リリースタグは `build-{commit SHA}`、タイトルはコミット SHA の先頭7文字を含む `Build {short SHA}` です。同一コミットで再実行した場合は、既存リリースの ZIP を更新します。
+リリースタグとタイトルは `src/plugin.json` の `Version` を正本として、`v{Version}` および `Send Text to Notion v{Version}` を使用します。公開版を更新する際は、Release 実行前に `Version` を更新してください。同じバージョンで再実行した場合は、既存 Release の ZIP を更新します。
+
+## Flow Launcher Plugin Store
+
+Plugin Store への初回掲載では、`src/plugin.json` の `ID`、`Name`、`Description`、`Author`、`Version`、`Language`、`Website` を使い、配布 ZIP、ソース、アイコン CDN の URL を指定した Manifest を Flow Launcher の Plugins Manifest リポジトリへ提出します。掲載 PR の作成と送信は、このリポジトリの Release 公開後に別途実行します。
