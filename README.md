@@ -32,6 +32,12 @@ dotnet build -c Release
 
 出力先: `bin\Release\net9.0-windows\`
 
+### リリース
+
+GitHub の **Actions > Release > Run workflow** から実行すると、GitHub Actions が Windows 上で Release ビルドを実行し、`Flow.Launcher.Plugin.Notion.zip` を添付した GitHub Release を作成します。リリースにはバージョン番号を使わず、実行対象コミットの SHA を識別子として使用します。同じコミットで再実行した場合は、既存リリースの ZIP を更新します。
+
+作成された ZIP は展開すると `plugin.json` が直下に配置されるため、`%APPDATA%\FlowLauncher\Plugins` に展開してインストールできます。
+
 ### 3. インストール
 
 ```powershell

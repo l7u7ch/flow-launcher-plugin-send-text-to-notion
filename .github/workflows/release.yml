@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build release
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Set release identifier
+        id: release
+        shell: pwsh
+        run: |
+          "tag=build-${{ github.sha }}" >> $env:GITHUB_OUTPUT
+          "title=Build $(${{ github.sha }}.Substring(0, 7))" >> $env:GITHUB_OUTPUT
+
+      - name: Package plugin
+        shell: pwsh
+        run: |
+          $output = "bin/Release/net9.0-windows"
+          $archive = "dist/Flow.Launcher.Plugin.Notion.zip"
+          New-Item -ItemType Directory -Force -Path "dist" | Out-Null
+          Compress-Archive -Path "$output/*" -DestinationPath $archive -Force
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+          RELEASE_TITLE: ${{ steps.release.outputs.title }}
+        shell: pwsh
+        run: |
+          if (gh release view $env:RELEASE_TAG 2>$null) {
+            gh release upload $env:RELEASE_TAG "dist/Flow.Launcher.Plugin.Notion.zip" --clobber
+          } else {
+            gh release create $env:RELEASE_TAG "dist/Flow.Launcher.Plugin.Notion.zip" --target "${{ github.sha }}" --title $env:RELEASE_TITLE --generate-notes
+          }

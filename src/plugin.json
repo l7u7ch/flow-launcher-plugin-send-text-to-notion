@@ -2,11 +2,7 @@
   "ID": "8AF2E3014DD049B0B437F781542C8878",
   "ActionKeyword": "*",
   "Name": "Notion",
-  "Description": "Send a quick memo to your Notion database",
-  "Author": "User",
-  "Version": "1.0.0",
   "Language": "csharp",
-  "Website": "",
   "IcoPath": "Images\\notion.png",
   "ExecuteFileName": "Flow.Launcher.Plugin.Notion.dll"
 }
