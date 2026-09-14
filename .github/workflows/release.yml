@@ -29,8 +29,9 @@ jobs:
         id: release
         shell: pwsh
         run: |
-          "tag=build-${{ github.sha }}" >> $env:GITHUB_OUTPUT
-          "title=Build $(${{ github.sha }}.Substring(0, 7))" >> $env:GITHUB_OUTPUT
+          $commit = "${{ github.sha }}"
+          "tag=build-$commit" >> $env:GITHUB_OUTPUT
+          "title=Build $($commit.Substring(0, 7))" >> $env:GITHUB_OUTPUT
 
       - name: Package plugin
         shell: pwsh
