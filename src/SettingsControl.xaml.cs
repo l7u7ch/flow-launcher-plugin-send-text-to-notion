@@ -1,11 +1,11 @@
 using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Controls;
+using iNKORE.UI.WPF.Modern.Common;
+using iNKORE.UI.WPF.Modern.Controls.Helpers;
 
 public partial class SettingsControl : UserControl
 {
     private readonly Settings _settings;
-    private bool _isApiTokenVisible;
 
     public SettingsControl(Settings settings)
     {
@@ -17,7 +17,6 @@ public partial class SettingsControl : UserControl
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
         ApiTokenBox.Password = _settings.ApiToken;
-        VisibleApiTokenBox.Text = _settings.ApiToken;
         DatabaseIdBox.Text = _settings.DatabaseId;
         TitlePropertyNameBox.Text = _settings.TitlePropertyName == "Name" ? string.Empty : _settings.TitlePropertyName;
         UpdatePlaceholders();
@@ -26,40 +25,16 @@ public partial class SettingsControl : UserControl
     private void ApiTokenBox_PasswordChanged(object sender, RoutedEventArgs e)
     {
         _settings.ApiToken = ApiTokenBox.Password;
-        UpdateApiTokenPlaceholder();
     }
 
-    private void VisibleApiTokenBox_TextChanged(object sender, TextChangedEventArgs e)
+    private void ShowApiTokenCheckBox_Changed(object sender, RoutedEventArgs e)
     {
-        _settings.ApiToken = VisibleApiTokenBox.Text;
-        UpdateApiTokenPlaceholder();
-    }
-
-    private void ToggleApiTokenVisibilityButton_Click(object sender, RoutedEventArgs e)
-    {
-        _isApiTokenVisible = !_isApiTokenVisible;
-
-        if (_isApiTokenVisible)
-        {
-            VisibleApiTokenBox.Text = ApiTokenBox.Password;
-            ApiTokenBox.Visibility = Visibility.Collapsed;
-            VisibleApiTokenBox.Visibility = Visibility.Visible;
-            ApiTokenLabel.Target = VisibleApiTokenBox;
-            ToggleApiTokenVisibilityButton.ToolTip = "Hide token";
-            AutomationProperties.SetName(ToggleApiTokenVisibilityButton, "Hide token");
-            UpdateApiTokenPlaceholder();
-            VisibleApiTokenBox.Focus();
-            return;
-        }
-
-        ApiTokenBox.Password = VisibleApiTokenBox.Text;
-        VisibleApiTokenBox.Visibility = Visibility.Collapsed;
-        ApiTokenBox.Visibility = Visibility.Visible;
-        ApiTokenLabel.Target = ApiTokenBox;
-        ToggleApiTokenVisibilityButton.ToolTip = "Show token";
-        AutomationProperties.SetName(ToggleApiTokenVisibilityButton, "Show token");
-        UpdateApiTokenPlaceholder();
-        ApiTokenBox.Focus();
+        PasswordBoxHelper.SetPasswordRevealMode(
+            ApiTokenBox,
+            ShowApiTokenCheckBox.IsChecked == true
+                ? PasswordRevealMode.Visible
+                : PasswordRevealMode.Hidden
+        );
     }
 
     private void DatabaseIdBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -81,19 +56,10 @@ public partial class SettingsControl : UserControl
 
     private void UpdatePlaceholders()
     {
-        UpdateApiTokenPlaceholder();
         DatabaseIdPlaceholder.Visibility = string.IsNullOrEmpty(DatabaseIdBox.Text)
             ? Visibility.Visible
             : Visibility.Collapsed;
         TitlePropertyNamePlaceholder.Visibility = string.IsNullOrEmpty(TitlePropertyNameBox.Text)
-            ? Visibility.Visible
-            : Visibility.Collapsed;
-    }
-
-    private void UpdateApiTokenPlaceholder()
-    {
-        var token = _isApiTokenVisible ? VisibleApiTokenBox.Text : ApiTokenBox.Password;
-        ApiTokenPlaceholder.Visibility = string.IsNullOrEmpty(token)
             ? Visibility.Visible
             : Visibility.Collapsed;
     }
